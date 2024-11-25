@@ -13,7 +13,8 @@ const Header = async () => {
   const { isAuthenticated } = getKindeServerSession();
 
   const isUserAuthenticated = await isAuthenticated();
-
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
@@ -52,7 +53,7 @@ const Header = async () => {
               className="inline-flex items-center"
               asChild
             >
-              <Link href="/dashboard">Dashboard</Link>
+              <Link href={"/dashboard/" + user?.id}>Dashboard</Link>
             </Button>
           </div>
           <nav className="flex items-center">
