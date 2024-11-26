@@ -4,7 +4,7 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 // Middleware function to handle authentication
 export async function middleware(request) {
   // Get session and authentication status in one call
-  const { isAuthenticated, getUser } = getKindeServerSession();
+  const { isAuthenticated } = getKindeServerSession();
   const isUserAuthenticated = await isAuthenticated();
 
   // If the user is trying to access a protected route and is not authenticated

@@ -1,4 +1,3 @@
-import localFont from "next/font/local";
 import "./globals.css";
 import { AuthProvider } from "@/AuthProvider";
 import Header from "@/components/custom/header";
