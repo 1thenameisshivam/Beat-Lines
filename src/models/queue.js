@@ -15,6 +15,10 @@ const queueSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    thumbnail: {
+      type: String,
+      required: true,
+    },
     votes: {
       type: Number,
       default: 0,

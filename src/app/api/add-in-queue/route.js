@@ -1,0 +1,58 @@
+import { NextResponse } from "next/server";
+import youtubesearchapi from "youtube-search-api";
+import Queue from "@/models/queue";
+import dbConnection from "@/config/dbConnection";
+export const POST = async (req) => {
+  await dbConnection();
+  try {
+    const { id, link, userid, addedBy } = await req.json();
+    const queueSize = 30;
+
+    const musicInQueue = await Queue.countDocuments({
+      roomId: userid,
+      status: "queued",
+    });
+
+    if (musicInQueue >= queueSize) {
+      return NextResponse.json(
+        {
+          message: "Queue is full",
+          sucess: false,
+        },
+        { status: 400 }
+      );
+    }
+    const data = await youtubesearchapi.GetVideoDetails(id);
+    if (!data) {
+      return NextResponse.json(
+        {
+          message: "Invalid URL Or Video Not Found",
+          sucess: false,
+        },
+        { status: 400 }
+      );
+    }
+    // Extract the thumbnail
+    const thumbnail =
+      data.thumbnail.thumbnails[4]?.url || // Try to fetch the 4th thumbnail
+      data.thumbnail.thumbnails[0]?.url; // Fallback to the first thumbnail
+    console.log(thumbnail);
+    const newSong = new Queue({
+      roomId: userid,
+      title: data.title,
+      songUrl: link,
+      thumbnail: thumbnail,
+      addedBy: addedBy,
+    });
+    await newSong.save();
+    return NextResponse.json(
+      { message: "Song added", sucess: true },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Internal Server Error", sucess: false },
+      { status: 500 }
+    );
+  }
+};
