@@ -14,6 +14,7 @@ const queueSchema = new mongoose.Schema(
     songUrl: {
       type: String,
       required: true,
+      unique: true,
     },
     thumbnail: {
       type: String,

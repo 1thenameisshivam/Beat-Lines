@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import QueueLine from "@/components/custom/queueLine";
 const Dashboard = () => {
   const { userid } = useParams();
   const { user } = useKindeBrowserClient();
@@ -20,10 +21,19 @@ const Dashboard = () => {
     }
     const data = await fetch("/api/add-in-queue", {
       method: "POST",
-      body: JSON.stringify({ id: match[1], link, userid, addedBy: user.id }),
+      body: JSON.stringify({
+        id: match[1],
+        link,
+        userid,
+        addedBy: user.given_name + " " + user?.family_name,
+      }),
     });
     const res = await data.json();
-    console.log(res);
+    if (res.success) {
+      toast.success("Song added to queue");
+    } else {
+      toast.error(res.message);
+    }
   };
   return (
     <div>
@@ -60,6 +70,9 @@ const Dashboard = () => {
         <Button onClick={handleAdd} className="px-5">
           Add
         </Button>
+      </div>
+      <div className="flex justify-center mt-10">
+        <QueueLine />
       </div>
     </div>
   );

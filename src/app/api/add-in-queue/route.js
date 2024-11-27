@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import youtubesearchapi from "youtube-search-api";
 import Queue from "@/models/queue";
 import dbConnection from "@/config/dbConnection";
+
 export const POST = async (req) => {
   await dbConnection();
   try {
@@ -17,6 +18,19 @@ export const POST = async (req) => {
       return NextResponse.json(
         {
           message: "Queue is full",
+          sucess: false,
+        },
+        { status: 400 }
+      );
+    }
+    const isAlreadyInQueue = await Queue.findOne({
+      roomId: userid,
+      songUrl: link,
+    });
+    if (isAlreadyInQueue) {
+      return NextResponse.json(
+        {
+          message: "Song already in queue",
           sucess: false,
         },
         { status: 400 }
@@ -46,12 +60,12 @@ export const POST = async (req) => {
     });
     await newSong.save();
     return NextResponse.json(
-      { message: "Song added", sucess: true },
+      { message: "Song added", success: true },
       { status: 200 }
     );
   } catch (error) {
     return NextResponse.json(
-      { message: "Internal Server Error", sucess: false },
+      { message: "Internal Server Error", success: false },
       { status: 500 }
     );
   }
