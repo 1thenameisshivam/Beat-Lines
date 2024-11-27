@@ -72,7 +72,7 @@ const Dashboard = () => {
         </Button>
       </div>
       <div className="flex justify-center mt-10">
-        <QueueLine />
+        <QueueLine admin={userid} user={user?.id} />
       </div>
     </div>
   );

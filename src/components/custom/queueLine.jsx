@@ -7,14 +7,18 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import YouTube from "react-youtube";
 
-const QueueUpdater = () => {
+const QueueUpdater = ({ admin, user }) => {
   const [songs, setSongs] = useState([]);
 
   useEffect(() => {
     const fetchQueue = async () => {
       try {
-        const res = await fetch(`/api/get-queue`, { method: "GET" });
+        const res = await fetch(`/api/get-queue`, {
+          method: "POST",
+          body: JSON.stringify({ admin }),
+        });
         const data = await res.json();
         if (data.success) {
           setSongs(data.data);
@@ -42,7 +46,7 @@ const QueueUpdater = () => {
           <CardTitle>Queue</CardTitle>
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-[400px] pr-4">
+          <ScrollArea className="h-[500px] pr-4">
             {songs?.slice(1).length > 0 ? (
               songs.slice(1).map((song, index) => (
                 <React.Fragment key={song.id || index}>
@@ -89,15 +93,22 @@ const QueueUpdater = () => {
         <CardContent>
           {songs?.length > 0 ? (
             <div className="flex flex-col items-center space-y-4">
-              <Avatar className="w-32 h-32">
-                <AvatarImage
-                  src={songs[0]?.thumbnail || ""}
-                  alt={songs[0]?.title}
-                />
-                <AvatarFallback>
-                  {songs[0]?.title[0]?.toUpperCase() || "?"}
-                </AvatarFallback>
-              </Avatar>
+              <YouTube
+                videoId={new URL(songs[0]?.songUrl).searchParams.get("v")}
+                opts={{
+                  height: "390",
+                  width: "430",
+                  playerVars: {
+                    autoplay: 1, // Automatically play the video
+                    controls: admin === user ? 1 : 0, // Enable controls only for admin
+                  },
+                }}
+                onEnd={() => {
+                  console.log("Song has ended!");
+                  // Trigger next song in queue or other actions here
+                }}
+                onError={(e) => console.error("YouTube Player Error:", e)}
+              />
               <h3 className="text-lg font-medium">{songs[0]?.title}</h3>
               <p className="text-sm text-muted-foreground">
                 Added by: {songs[0]?.addedBy}
