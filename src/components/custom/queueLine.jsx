@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import YouTube from "react-youtube";
 import Image from "next/image";
 import { toast } from "sonner";
+import { Button } from "../ui/button";
 
 const QueueUpdater = ({ admin, user }) => {
   const [songs, setSongs] = useState([]);
@@ -48,6 +49,18 @@ const QueueUpdater = ({ admin, user }) => {
     }
   };
 
+  const handleRemove = async (id) => {
+    const res = await fetch(`/api/remove-song`, {
+      method: "DELETE",
+      body: JSON.stringify({ songId: id }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      toast.success(data.message);
+    } else {
+      toast.error(data.message);
+    }
+  };
   return (
     <div className="flex w-full max-w-4xl mx-auto justify-center gap-6 h-full py-4">
       {/* Queue Section */}
@@ -117,7 +130,7 @@ const QueueUpdater = ({ admin, user }) => {
                     },
                   }}
                   onEnd={() => {
-                    console.log("Song has ended!");
+                    handleRemove(songs[0]._id);
                     // Trigger next song in queue or other actions here
                   }}
                   onError={(e) => console.error("YouTube Player Error:", e)}
@@ -135,7 +148,14 @@ const QueueUpdater = ({ admin, user }) => {
               <p className="text-sm text-muted-foreground">
                 Added by: {songs[0]?.addedBy}
               </p>
-              <p className="text-sm">Votes: {songs[0]?.votes}</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm">Votes: {songs[0]?.votes}</p>
+                {admin == user && (
+                  <Button onClick={() => handleRemove(songs[0]._id)}>
+                    Next Song
+                  </Button>
+                )}
+              </div>
             </div>
           ) : (
             <p className="text-center text-muted-foreground py-4">
