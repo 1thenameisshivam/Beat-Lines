@@ -24,6 +24,11 @@ const queueSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    votedBy: [
+      {
+        type: String,
+      },
+    ],
     addedBy: {
       type: String,
       required: true,
