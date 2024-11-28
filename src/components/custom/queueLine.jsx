@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import YouTube from "react-youtube";
+import Image from "next/image";
 
 const QueueUpdater = ({ admin, user }) => {
   const [songs, setSongs] = useState([]);
@@ -20,6 +21,7 @@ const QueueUpdater = ({ admin, user }) => {
           body: JSON.stringify({ admin }),
         });
         const data = await res.json();
+        console.log(data);
         if (data.success) {
           setSongs(data.data);
         } else {
@@ -66,10 +68,10 @@ const QueueUpdater = ({ admin, user }) => {
                         Added by: {song.addedBy}
                       </p>
                     </div>
-                    <Button variant="ghost" className="flex items-center gap-1">
+                    <button className="flex items-center gap-1 hover:bg-accent px-2 py-1 rounded">
                       <ChevronUp className="h-4 w-4" />
                       <span>{song.votes}</span>
-                    </Button>
+                    </button>
                   </div>
                   {index < songs.slice(1).length - 1 && (
                     <Separator className="my-2" />
@@ -93,22 +95,31 @@ const QueueUpdater = ({ admin, user }) => {
         <CardContent>
           {songs?.length > 0 ? (
             <div className="flex flex-col items-center space-y-4">
-              <YouTube
-                videoId={new URL(songs[0]?.songUrl).searchParams.get("v")}
-                opts={{
-                  height: "390",
-                  width: "430",
-                  playerVars: {
-                    autoplay: 1, // Automatically play the video
-                    controls: admin === user ? 1 : 0, // Enable controls only for admin
-                  },
-                }}
-                onEnd={() => {
-                  console.log("Song has ended!");
-                  // Trigger next song in queue or other actions here
-                }}
-                onError={(e) => console.error("YouTube Player Error:", e)}
-              />
+              {admin == user ? (
+                <YouTube
+                  videoId={new URL(songs[0]?.songUrl).searchParams.get("v")}
+                  opts={{
+                    height: "390",
+                    width: "430",
+                    playerVars: {
+                      autoplay: 1, // Automatically play the video
+                    },
+                  }}
+                  onEnd={() => {
+                    console.log("Song has ended!");
+                    // Trigger next song in queue or other actions here
+                  }}
+                  onError={(e) => console.error("YouTube Player Error:", e)}
+                />
+              ) : (
+                <Image
+                  src={songs[0].thumbnail}
+                  alt="song"
+                  width={430}
+                  className="rounded-lg"
+                  height={390}
+                />
+              )}
               <h3 className="text-lg font-medium">{songs[0]?.title}</h3>
               <p className="text-sm text-muted-foreground">
                 Added by: {songs[0]?.addedBy}
