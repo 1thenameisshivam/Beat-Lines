@@ -8,7 +8,10 @@ export const POST = async (req) => {
 
   try {
     const { admin } = await req.json();
-    const queueData = await Queue.find({ roomId: admin, status: "queued" });
+    const queueData = await Queue.find({
+      roomId: admin,
+      status: "queued",
+    }).sort({ votes: -1 });
     if (!queueData) {
       return NextResponse.json(
         { message: "No songs in queue", success: false },
