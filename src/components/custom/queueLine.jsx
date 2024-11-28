@@ -131,7 +131,6 @@ const QueueUpdater = ({ admin, user }) => {
                   }}
                   onEnd={() => {
                     handleRemove(songs[0]._id);
-                    // Trigger next song in queue or other actions here
                   }}
                   onError={(e) => console.error("YouTube Player Error:", e)}
                 />

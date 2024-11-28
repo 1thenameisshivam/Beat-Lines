@@ -2,10 +2,10 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{js,jsx}',
-    './components/**/*.{js,jsx}',
-    './app/**/*.{js,jsx}',
-    './src/**/*.{js,jsx}',
+    "./pages/**/*.{js,jsx}",
+    "./components/**/*.{js,jsx}",
+    "./app/**/*.{js,jsx}",
+    "./src/**/*.{js,jsx}",
   ],
   prefix: "",
   theme: {
@@ -21,6 +21,15 @@ module.exports = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+        "slate-900": "var(--slate-900)",
+        black: "var(--black)",
+        "neutral-900": "var(--neutral-900)",
+        "cyan-500": "var(--cyan-500)",
+        "emerald-500": "var(--emerald-500)",
+        "pink-500": "var(--pink-500)",
+        "indigo-500": "var(--indigo-500)",
+        "orange-500": "var(--orange-500)",
+        "yellow-500": "var(--yellow-500)",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
@@ -71,7 +80,15 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      backgroundImage: {
+        "gradient-cyan-emerald":
+          "linear-gradient(to bottom right, var(--cyan-500), var(--emerald-500))",
+        "gradient-pink-indigo":
+          "linear-gradient(to bottom right, var(--pink-500), var(--indigo-500))",
+        "gradient-orange-yellow":
+          "linear-gradient(to bottom right, var(--orange-500), var(--yellow-500))",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};

@@ -29,6 +29,19 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --slate-900: #1e293b; /* Dark Slate */
+    --black: #000000; /* Black */
+    --neutral-900: #111827; /* Neutral Dark */
+
+    --cyan-500: #06b6d4; /* Cyan */
+    --emerald-500: #10b981; /* Emerald */
+    --pink-500: #ec4899; /* Pink */
+    --indigo-500: #6366f1; /* Indigo */
+    --orange-500: #ff9800; /* Orange */
+    --yellow-500: #ffeb3b; /* Yellow */
+
+    --orange-800: #ff9890; /* Darker Orange */
+    --yellow-800: #ffeb6b; /* Darker Yellow */
   }
 
   .dark {
@@ -66,4 +79,8 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+*::-webkit-scrollbar {
+  display: none;
 }

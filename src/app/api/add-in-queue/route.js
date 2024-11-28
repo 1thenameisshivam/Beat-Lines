@@ -7,7 +7,7 @@ export const POST = async (req) => {
   await dbConnection();
   try {
     const { id, link, userid, addedBy } = await req.json();
-    const queueSize = 30;
+    const queueSize = 15;
 
     const musicInQueue = await Queue.countDocuments({
       roomId: userid,
