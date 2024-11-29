@@ -40,7 +40,12 @@ export function HeroSection() {
               Get Started for Free
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
-            <Button size="lg" variant="outline" className="h-12 px-6">
+            <Button
+              onClick={() => navigate.push("/docs")}
+              size="lg"
+              variant="outline"
+              className="h-12 px-6"
+            >
               Learn More
             </Button>
           </div>

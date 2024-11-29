@@ -62,9 +62,9 @@ const QueueUpdater = ({ admin, user }) => {
     }
   };
   return (
-    <div className="flex w-full max-w-4xl mx-auto justify-center gap-6 h-full py-4">
+    <div className="md:flex w-full p-2 max-w-4xl mx-auto justify-center gap-6 h-full py-4">
       {/* Queue Section */}
-      <Card className="w-1/2">
+      <Card className="md:w-1/2">
         <CardHeader>
           <CardTitle>Queue</CardTitle>
         </CardHeader>
@@ -112,7 +112,7 @@ const QueueUpdater = ({ admin, user }) => {
       </Card>
 
       {/* Currently Playing Section */}
-      <Card className="w-1/2">
+      <Card className=" md:w-1/2">
         <CardHeader>
           <CardTitle>Currently Playing</CardTitle>
         </CardHeader>
