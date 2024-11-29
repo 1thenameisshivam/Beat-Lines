@@ -27,12 +27,6 @@ const Header = async () => {
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
             <Link
-              href="/about"
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-            >
-              About
-            </Link>
-            <Link
               href="/pricing"
               className="transition-colors hover:text-foreground/80 text-foreground/60"
             >
@@ -47,15 +41,17 @@ const Header = async () => {
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <div className="w-full flex-1 md:w-auto md:flex-none">
-            <Button
-              variant="outline"
-              className="inline-flex items-center"
-              asChild
-            >
-              <Link href={"/dashboard/" + user?.id}>Dashboard</Link>
-            </Button>
-          </div>
+          {!isAuthenticated && (
+            <div className="w-full flex-1 md:w-auto md:flex-none">
+              <Button
+                variant="outline"
+                className="inline-flex items-center"
+                asChild
+              >
+                <Link href={"/dashboard/" + user?.id}>Dashboard</Link>
+              </Button>
+            </div>
+          )}
           <nav className="flex items-center">
             {isUserAuthenticated ? (
               <LogoutLink>

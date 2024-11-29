@@ -52,7 +52,7 @@ const content = [
 
 export function HowItWorksSection() {
   return (
-    <section className="py-32 overflow-hidden bg-white">
+    <section className="py-3 overflow-hidden bg-white">
       <div className="container">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
