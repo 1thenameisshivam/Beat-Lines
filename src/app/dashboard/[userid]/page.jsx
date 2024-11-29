@@ -43,7 +43,9 @@ const Dashboard = () => {
             className="w-2/3 p-4"
             disabled
             type="text"
-            value={process.env.FRONTEND_URL + "/dashboard/" + userid}
+            value={
+              process.env.NEXT_PUBLIC_FRONTEND_URL + "/dashboard/" + userid
+            }
           />
           {
             <Button
