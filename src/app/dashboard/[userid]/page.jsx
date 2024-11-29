@@ -43,7 +43,7 @@ const Dashboard = () => {
             className="w-2/3 p-4"
             disabled
             type="text"
-            value={"http://localhost:3000/dashboard/" + userid}
+            value={process.env.FRONTEND_URL + "/dashboard/" + userid}
           />
           {
             <Button
