@@ -4,8 +4,8 @@ import Queue from "@/models/queue";
 import dbConnection from "@/config/dbConnection";
 
 export const POST = async (req) => {
-  await dbConnection();
   try {
+    await dbConnection();
     const { id, link, userid, addedBy } = await req.json();
     const queueSize = 15;
 
@@ -37,6 +37,7 @@ export const POST = async (req) => {
       );
     }
     const data = await youtubesearchapi.GetVideoDetails(id);
+    console.log(data);
     if (!data) {
       return NextResponse.json(
         {
