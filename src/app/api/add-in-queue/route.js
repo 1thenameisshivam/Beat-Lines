@@ -48,8 +48,10 @@ export const POST = async (req) => {
     }
     // Extract the thumbnail
     const thumbnail =
-      data.thumbnail.thumbnails[4]?.url || // Try to fetch the 4th thumbnail
-      data.thumbnail.thumbnails[0]?.url; // Fallback to the first thumbnail
+      data?.thumbnail.thumbnails[4]?.url || // Try to fetch the 4th thumbnail
+      data?.thumbnail.thumbnails[0]?.url ||
+      "https://www.electronicshub.org/wp-content/uploads/2021/09/YOUTUBE-THUMBNIL-NOT-SHOWING.jpg"; // Fallback to the first thumbnail
+
     console.log(thumbnail);
     const newSong = new Queue({
       roomId: userid,
