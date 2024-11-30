@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import youtubesearchapi from "youtube-search-api";
+import { youtubesearchapi } from "youtube-search-api";
 import Queue from "@/models/queue";
 import dbConnection from "@/config/dbConnection";
 
@@ -8,12 +8,10 @@ export const POST = async (req) => {
     await dbConnection();
     const { id, link, userid, addedBy } = await req.json();
     const queueSize = 15;
-    console.log(id, link, userid, addedBy);
     const musicInQueue = await Queue.countDocuments({
       roomId: userid,
       status: "queued",
     });
-    console.log("musicInQueue", musicInQueue);
 
     if (musicInQueue >= queueSize) {
       return NextResponse.json(
@@ -28,7 +26,7 @@ export const POST = async (req) => {
       roomId: userid,
       songUrl: link,
     });
-    console.log("isAlreadyInQueue", isAlreadyInQueue);
+
     if (isAlreadyInQueue) {
       return NextResponse.json(
         {
