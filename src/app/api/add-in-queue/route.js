@@ -6,6 +6,65 @@ import dbConnection from "@/config/dbConnection";
 export const POST = async (req) => {
   try {
     await dbConnection();
+    const { id, link, userid, addedBy } = await req.json();
+    const queueSize = 15;
+    console.log(id, link, userid, addedBy);
+    const musicInQueue = await Queue.countDocuments({
+      roomId: userid,
+      status: "queued",
+    });
+    console.log("musicInQueue", musicInQueue);
+
+    if (musicInQueue >= queueSize) {
+      return NextResponse.json(
+        {
+          message: "Queue is full",
+          sucess: false,
+        },
+        { status: 400 }
+      );
+    }
+    const isAlreadyInQueue = await Queue.findOne({
+      roomId: userid,
+      songUrl: link,
+    });
+    console.log("isAlreadyInQueue", isAlreadyInQueue);
+    if (isAlreadyInQueue) {
+      return NextResponse.json(
+        {
+          message: "Song already in queue",
+          sucess: false,
+        },
+        { status: 400 }
+      );
+    }
+    const data = await youtubesearchapi.GetVideoDetails(id);
+    console.log("data", data);
+    if (!data) {
+      return NextResponse.json(
+        {
+          message: "Invalid URL Or Video Not Found",
+          sucess: false,
+        },
+        { status: 400 }
+      );
+    }
+    // Extract the thumbnail
+    const thumbnail =
+      data?.thumbnail.thumbnails[4]?.url || // Try to fetch the 4th thumbnail
+      data?.thumbnail.thumbnails[0]?.url ||
+      "https://www.electronicshub.org/wp-content/uploads/2021/09/YOUTUBE-THUMBNIL-NOT-SHOWING.jpg"; // Fallback to the first thumbnail
+
+    console.log("thumbnail", thumbnail);
+    const newSong = new Queue({
+      roomId: userid,
+      title: data.title,
+      songUrl: link,
+      thumbnail: thumbnail,
+      addedBy: addedBy,
+    });
+    console.log("newsong:", newSong);
+    await newSong.save();
     return NextResponse.json(
       { message: "Song added", success: true },
       { status: 200 }
