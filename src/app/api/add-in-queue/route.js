@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { youtubesearchapi } from "youtube-search-api";
+import youtubesearchapi from "youtube-search-api";
 import Queue from "@/models/queue";
 import dbConnection from "@/config/dbConnection";
 
