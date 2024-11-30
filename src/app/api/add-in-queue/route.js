@@ -6,9 +6,16 @@ import dbConnection from "@/config/dbConnection";
 
 export const POST = async (req) => {
   try {
+    // Establish database connection
     await dbConnection();
+
+    // Parse request body
     const { id, link, userid, addedBy } = await req.json();
+
+    // Define the queue size limit
     const queueSize = 15;
+
+    // Check the current queue size
     const musicInQueue = await Queue.countDocuments({
       roomId: userid,
       status: "queued",
@@ -18,11 +25,13 @@ export const POST = async (req) => {
       return NextResponse.json(
         {
           message: "Queue is full",
-          sucess: false,
+          success: false,
         },
         { status: 400 }
       );
     }
+
+    // Check if the song is already in the queue
     const isAlreadyInQueue = await Queue.findOne({
       roomId: userid,
       songUrl: link,
@@ -32,29 +41,35 @@ export const POST = async (req) => {
       return NextResponse.json(
         {
           message: "Song already in queue",
-          sucess: false,
+          success: false,
         },
         { status: 400 }
       );
     }
+
+    // Fetch video details from YouTube API
     const data = await youtubesearchapi.GetVideoDetails(id);
-    console.log("data", data);
+    console.log("YouTube API response data:", data);
+
     if (!data) {
       return NextResponse.json(
         {
-          message: "Invalid URL Or Video Not Found",
-          sucess: false,
+          message: "Invalid URL or video not found",
+          success: false,
         },
         { status: 400 }
       );
     }
-    // Extract the thumbnail
-    const thumbnail =
-      data?.thumbnail.thumbnails[4]?.url || // Try to fetch the 4th thumbnail
-      data?.thumbnail.thumbnails[0]?.url ||
-      "https://www.electronicshub.org/wp-content/uploads/2021/09/YOUTUBE-THUMBNIL-NOT-SHOWING.jpg"; // Fallback to the first thumbnail
 
-    console.log("thumbnail", thumbnail);
+    // Extract thumbnail with a fallback
+    const thumbnail =
+      data?.thumbnail?.thumbnails?.[4]?.url || // Fetch the 5th thumbnail
+      data?.thumbnail?.thumbnails?.[0]?.url || // Fallback to the 1st thumbnail
+      "https://www.electronicshub.org/wp-content/uploads/2021/09/YOUTUBE-THUMBNIL-NOT-SHOWING.jpg";
+
+    console.log("Thumbnail URL:", thumbnail);
+
+    // Create a new song in the queue
     const newSong = new Queue({
       roomId: userid,
       title: data.title,
@@ -62,15 +77,29 @@ export const POST = async (req) => {
       thumbnail: thumbnail,
       addedBy: addedBy,
     });
-    console.log("newsong:", newSong);
+
+    console.log("New song object:", newSong);
+
+    // Save the new song to the database
     await newSong.save();
+
+    // Return success response
     return NextResponse.json(
       { message: "Song added", success: true },
       { status: 200 }
     );
   } catch (error) {
+    // Log the error with stack trace for debugging
+    console.error("Error occurred:", error);
+
+    // Return detailed error response
     return NextResponse.json(
-      { message: "Internal Server Error", success: false, error },
+      {
+        message: "Internal Server Error",
+        success: false,
+        error: error.message,
+        stack: error.stack, // Include stack trace in the response
+      },
       { status: 500 }
     );
   }
