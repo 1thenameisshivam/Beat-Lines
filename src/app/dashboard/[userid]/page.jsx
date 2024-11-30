@@ -51,7 +51,7 @@ const Dashboard = () => {
             <Button
               onClick={() => {
                 navigator.clipboard.writeText(
-                  "http://localhost:3000/dashboard/" + userid
+                  process.env.NEXT_PUBLIC_FRONTEND_URL + "/dashboard/" + userid
                 );
                 toast.success("Copied to clipboard");
               }}
