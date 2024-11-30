@@ -1,5 +1,6 @@
+// @ts-ignore
 import { NextResponse } from "next/server";
-import youtubesearchapi from "youtube-search-api";
+const youtubesearchapi = require("youtube-search-api");
 import Queue from "@/models/queue";
 import dbConnection from "@/config/dbConnection";
 
